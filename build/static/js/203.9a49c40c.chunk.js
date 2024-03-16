@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkwalletgrow_frontend=self.webpackChunkwalletgrow_frontend||[]).push([[203],{203:(e,r,l)=>{l.r(r),l.d(r,{default:()=>t});l(5043);var n=l(579);const t=()=>(0,n.jsx)("div",{children:(0,n.jsx)("h1",{children:"Project"})})}}]);
+//# sourceMappingURL=203.9a49c40c.chunk.js.map

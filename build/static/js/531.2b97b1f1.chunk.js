@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkwalletgrow_frontend=self.webpackChunkwalletgrow_frontend||[]).push([[531],{3531:(e,l,t)=>{t.r(l),t.d(l,{default:()=>a});t(5043);var s=t(579);const a=()=>(0,s.jsx)("div",{className:"h-[calc(100vh_-_7rem)] w-full grid place-items-center pt-28",children:(0,s.jsxs)("h1",{className:"text-2xl font-bold text-sky-600 text-center",children:["We'll be back soon. ",(0,s.jsx)("br",{})," Thank you."]})})}}]);
+//# sourceMappingURL=531.2b97b1f1.chunk.js.map
