@@ -12,15 +12,10 @@ const WalletSchema = new Schema(
       required: true,
       default: 0,
     },
-    invest: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+    investment: [{ type: Schema.Types.ObjectId, ref: "Investment" }],
     password: {
       type: String,
     },
-    start: Date,
   },
   {
     timestamps: {
@@ -33,7 +28,7 @@ const WalletSchema = new Schema(
 );
 
 WalletSchema.virtual("coin").get(function () {
-  return parseFloat(this.binance);
+  return parseFloat(this.binance).toFixed(3);
 });
 
 const WalletModel = model("Wallet", WalletSchema);

@@ -35,7 +35,7 @@ const inAccount = asyncHandler(async (req, res) => {
   await user.save();
   await Wallet.findOneAndUpdate({ user: req.user._id }, { $inc: { binance: coin } });
   await History.create({ user: req.user._id, type: "in", amount: coin });
-  res.json(`${coin} Coin have been transferred to your X-Wallet`);
+  res.status(201).json(`${coin} Coin have been transferred to your X-Wallet`);
 });
 
 const getAllRecharges = asyncHandler(async (req, res) => {
@@ -96,6 +96,11 @@ const getHistories = asyncHandler(async (req, res) => {
   res.json({ histories, total, page, pages: Math.ceil(total / pageSize) });
 });
 
+const getFinanceHistory = asyncHandler(async (req, res) => {
+  const histories = await History.find({ user: req.user._id, type: "invest" });
+  res.json(histories);
+});
+
 export {
   rechargeToAccount,
   getRecharge,
@@ -104,5 +109,6 @@ export {
   getRechargeById,
   updateRechargeStatus,
   deleteRechargeById,
+  getFinanceHistory,
   getHistories,
 };

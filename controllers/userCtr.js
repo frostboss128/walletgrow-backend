@@ -17,7 +17,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, invited } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -27,6 +27,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({ email, username, password });
   await Wallet.create({ user: user._id });
+  if (invited) await User.findOneAndUpdate({ email: invited }, { $addToSet: { invited: user._id } });
 
   if (user) {
     generateToken(res, user._id);
@@ -46,7 +47,7 @@ const logoutUser = (req, res) => {
 };
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user._id).select("-password").populate("invited", "_id email username");
 
   if (user) {
     res.json(user);

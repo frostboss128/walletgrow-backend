@@ -9,7 +9,7 @@ const HistorySchema = new Schema(
     },
     type: {
       type: String,
-      enum: ["in", "out"],
+      enum: ["in", "out", "invest"],
       required: true,
     },
     amount: {
@@ -28,7 +28,7 @@ const HistorySchema = new Schema(
 );
 
 HistorySchema.virtual("coin").get(function () {
-  return parseFloat(this.amount);
+  return parseFloat(this.amount).toFixed(3);
 });
 
 const HistoryModel = model("History", HistorySchema);

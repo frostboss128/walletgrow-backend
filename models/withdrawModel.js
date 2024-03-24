@@ -32,7 +32,7 @@ const WithdrawSchema = new Schema(
 );
 
 WithdrawSchema.virtual("coin").get(function () {
-  return parseFloat(this.binance);
+  return parseFloat(this.binance).toFixed(3);
 });
 
 const WithdrawModel = model("Withdraw", WithdrawSchema);

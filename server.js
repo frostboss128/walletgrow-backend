@@ -3,6 +3,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config();
+import compress from "compression";
+import morgan from "morgan";
 import connectDB from "./config/db.js";
 import routes from "./routes/index.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -20,6 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api", routes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(compress());
+} else {
+  app.use(morgan("dev"));
+}
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

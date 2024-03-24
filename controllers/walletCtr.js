@@ -3,10 +3,10 @@ import User from "../models/userModel.js";
 import Wallet from "../models/walletModel.js";
 import History from "../models/HistoryModel.js";
 import Withdraw from "../models/withdrawModel.js";
-import Admin from "../models/adminModel.js";
+import Investment from "../models/investmentModel.js";
 
 const getWalletByUserId = asyncHandler(async (req, res) => {
-  const wallet = await Wallet.findOne({ user: req.user._id });
+  const wallet = await Wallet.findOne({ user: req.user._id }).populate("investment").populate("investment.type");
   if (wallet) {
     res.status(200).json(wallet);
   } else {
@@ -39,7 +39,7 @@ const withdrawWallet = asyncHandler(async (req, res) => {
   if (wallet.coin < coin + binanceSum) throw new Error(`Invalid coin. Please recheck your withdraw records`);
 
   const withdraw = await Withdraw.create({ user: req.user._id, address, binance: parseFloat(coin) });
-  if (1) {
+  if (withdraw) {
     res.status(201).json(`Withdraw request has been submitted successfully`);
   } else {
     throw new Error("Invalid withdraw");

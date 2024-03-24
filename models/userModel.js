@@ -32,6 +32,12 @@ const UserSchema = new Schema(
       type: Schema.Types.Decimal128,
       default: 0.0,
     },
+    invited: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     roles: {
       type: String,
       enum: ["user", "admin", "superAdmin"],
@@ -62,7 +68,7 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.virtual("coin").get(function () {
-  return parseFloat(this.binance);
+  return parseFloat(this.binance).toFixed(3);
 });
 
 const UserModel = model("User", UserSchema);
