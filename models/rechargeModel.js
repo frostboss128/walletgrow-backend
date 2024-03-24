@@ -25,6 +25,10 @@ const RechargeSchema = new Schema(
       enum: ["Approved", "Pending", "Failed"],
       default: "Pending",
     },
+    amount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: {

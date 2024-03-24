@@ -9,7 +9,7 @@ const HistorySchema = new Schema(
     },
     type: {
       type: String,
-      enum: ["in", "out", "invest"],
+      enum: ["in", "out", "invest", "commission"],
       required: true,
     },
     amount: {

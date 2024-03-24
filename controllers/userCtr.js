@@ -27,7 +27,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({ email, username, password });
   await Wallet.create({ user: user._id });
-  if (invited) await User.findOneAndUpdate({ email: invited }, { $addToSet: { invited: user._id } });
+  if (invited) {
+    const inviteUser = await User.findOne({ email: invited });
+    if (inviteUser) user.invited = inviteUser._id;
+    user.save();
+  }
 
   if (user) {
     generateToken(res, user._id);

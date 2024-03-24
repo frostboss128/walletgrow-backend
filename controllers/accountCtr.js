@@ -4,10 +4,12 @@ import Wallet from "../models/walletModel.js";
 import Recharge from "../models/rechargeModel.js";
 import History from "../models/HistoryModel.js";
 import Admin from "../models/adminModel.js";
+import isEmpty from "../utils/isEmpty.js";
 
 const rechargeToAccount = asyncHandler(async (req, res) => {
-  const { type, coin, transactionId } = req.body;
-  if (!(type === "usdt" || type === "trx" || !transactionId)) throw new Error(`Please recheck the recharge rules!`);
+  const { type, transactionId } = req.body;
+  const coin = parseFloat(req.body.coin);
+  if (!(type === "usdt" || type === "trx") || !transactionId) throw new Error(`Please recheck the recharge rules!`);
   if ((type === "usdt" && coin < 10) || (type === "trx" && coin < 100))
     throw new Error(`Please recheck the recharge rules!`);
 
@@ -62,12 +64,20 @@ const getRechargeById = asyncHandler(async (req, res) => {
 
 const updateRechargeStatus = asyncHandler(async (req, res) => {
   const { status, userId } = req.body;
+  const amount = parseFloat(req.body.amount);
   const recharge = await Recharge.findById(req.params.rechargeId);
   if (!recharge) throw new Error(`Not found`);
 
-  if (recharge.status !== "Approved" && status === "Approved")
-    await User.findByIdAndUpdate(userId, { $inc: { binance: parseFloat(recharge.coin) } });
+  if (recharge.status !== "Approved" && status === "Approved") {
+    await User.findByIdAndUpdate(userId, { $inc: { binance: amount } });
+    const user = await User.findById(req.user._id);
+    if (!isEmpty(user.invited)) {
+      await User.findByIdAndUpdate(user.invited, { $inc: { binance: amount * 0.05 } });
+      await History.create({ user: user.invited, type: "commission", amount: amount * 0.05 });
+    }
+  }
   recharge.status = status;
+  recharge.amount = amount;
   await recharge.save();
 
   res.status(201).json(`Recharge request has been ${status}`);
@@ -96,9 +106,16 @@ const getHistories = asyncHandler(async (req, res) => {
   res.json({ histories, total, page, pages: Math.ceil(total / pageSize) });
 });
 
-const getFinanceHistory = asyncHandler(async (req, res) => {
-  const histories = await History.find({ user: req.user._id, type: "invest" });
+const getHistoryByType = asyncHandler(async (req, res) => {
+  const { type } = req.query;
+  if (!type) throw new Error("Invalid type");
+  const histories = await History.find({ user: req.user._id, type });
   res.json(histories);
+});
+
+const invitedUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({ invited: req.user._id }).select("_id email username created_at");
+  res.status(200).json(users);
 });
 
 export {
@@ -109,6 +126,7 @@ export {
   getRechargeById,
   updateRechargeStatus,
   deleteRechargeById,
-  getFinanceHistory,
   getHistories,
+  getHistoryByType,
+  invitedUsers,
 };

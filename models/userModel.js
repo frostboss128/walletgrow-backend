@@ -32,12 +32,10 @@ const UserSchema = new Schema(
       type: Schema.Types.Decimal128,
       default: 0.0,
     },
-    invited: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    invited: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     roles: {
       type: String,
       enum: ["user", "admin", "superAdmin"],

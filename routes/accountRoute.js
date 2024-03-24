@@ -7,8 +7,9 @@ import {
   getRechargeById,
   updateRechargeStatus,
   deleteRechargeById,
-  getFinanceHistory,
   getHistories,
+  getHistoryByType,
+  invitedUsers,
 } from "../controllers/accountCtr.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
@@ -17,7 +18,8 @@ const router = Router();
 router.route("/").get(protect, getRecharge).post(protect, rechargeToAccount);
 
 router.route("/in").post(protect, inAccount);
-router.route("/finance").get(protect, getFinanceHistory);
+router.route("/type").get(protect, getHistoryByType);
+router.route("/friends").get(protect, invitedUsers);
 router.route("/recharges").get(protect, isAdmin, getAllRecharges);
 router.route("/history").get(protect, isAdmin, getHistories);
 
