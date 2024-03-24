@@ -6,14 +6,14 @@ import History from "../models/HistoryModel.js";
 import moment from "moment";
 
 const createNewType = asyncHandler(async (req, res) => {
-  const { name, daily, cycle, cycle_description, duration, deration_description } = req.body;
+  const { name, daily, cycle, cycle_description, duration, duration_description } = req.body;
   const newType = await InvestmentType.create({
     name,
     daily,
     cycle,
     cycle_description,
     duration,
-    deration_description,
+    duration_description,
   });
   if (!newType) throw new Error("Invalid InvestmentType");
   res.status(201).json({ message: "New investment type created successfully!" });
@@ -33,7 +33,7 @@ const updateInvestmentTypeById = asyncHandler(async (req, res) => {
     cycle,
     cycle_description,
     duration,
-    deration_description,
+    duration_description,
   });
   if (!updated) throw new Error("Not found investment type");
   res.status(201).json({ message: "Updated successfully" });
