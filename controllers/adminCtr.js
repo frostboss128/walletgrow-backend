@@ -92,7 +92,7 @@ const getInvestmentByUserTypeId = asyncHandler(async (req, res) => {
 });
 
 const investmentRecord = asyncHandler(async (req, res) => {
-  const invests = await Investment.find({ user: req.user._id });
+  const invests = await Investment.find({ user: req.user._id }).populate("type").populate("user");
   res.status(200).json(invests);
 });
 

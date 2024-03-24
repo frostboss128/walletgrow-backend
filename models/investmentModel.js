@@ -32,7 +32,7 @@ const InvestmentSchema = new Schema(
   },
   {
     timestamps: {
-      createdAt: "stated",
+      createdAt: "started",
       updatedAt: "updated_at",
     },
     toJSON: { virtuals: true },
