@@ -25,8 +25,8 @@ const outWallet = asyncHandler(async (req, res) => {
 });
 
 const withdrawWallet = asyncHandler(async (req, res) => {
-  const { address, coin: coinR } = req.body;
-  const coin = parseFloat(coinR);
+  const { address } = req.body;
+  const coin = parseFloat(req.body.coin);
   if (!coin) throw new Error(`Invalid coin`);
   if (!address) throw new Error(`Invalid address`);
   const wallet = await Wallet.findOne({ user: req.user._id });
@@ -39,11 +39,11 @@ const withdrawWallet = asyncHandler(async (req, res) => {
   if (wallet.coin < coin + binanceSum) throw new Error(`Invalid coin. Please recheck your withdraw records`);
 
   const withdraw = await Withdraw.create({ user: req.user._id, address, binance: parseFloat(coin) });
-  if (withdraw) {
-    res.status(201).json(`Withdraw request has been submitted successfully`);
-  } else {
-    throw new Error("Invalid withdraw");
-  }
+  wallet.binance = parseFloat(wallet.binance) - coin;
+  await wallet.save();
+
+  if (withdraw) res.status(201).json(`Withdraw request has been submitted successfully`);
+  else throw new Error("Invalid withdraw");
 });
 
 const getWithdraws = asyncHandler(async (req, res) => {
@@ -78,9 +78,10 @@ const updateWithdrawStatus = asyncHandler(async (req, res) => {
   const withdraw = await Withdraw.findById(req.params.withdrawId);
   if (!withdraw) throw new Error(`Not found`);
 
-  if (withdraw.status !== "Approved" && status === "Approved") {
-    await Wallet.findOneAndUpdate({ user: userId }, { $inc: { binance: -1 * parseFloat(withdraw.coin) } });
+  if (!(withdraw.status !== "Approved" && status === "Approved")) {
+    await Wallet.findOneAndUpdate({ user: userId }, { $inc: { binance: parseFloat(withdraw.coin) } });
   }
+
   withdraw.status = status;
   await withdraw.save();
 
