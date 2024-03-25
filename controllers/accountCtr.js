@@ -23,7 +23,7 @@ const rechargeToAccount = asyncHandler(async (req, res) => {
 });
 
 const getRecharge = asyncHandler(async (req, res) => {
-  const recharges = await Recharge.find({ user: req.user._id });
+  const recharges = await Recharge.find({ user: req.user._id }).sort("-updated_at");
   res.status(200).json(recharges);
 });
 
@@ -45,7 +45,7 @@ const getAllRecharges = asyncHandler(async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 50;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort || "created_at";
-  const sortDirection = parseInt(req.query.sortDirection) || 1;
+  const sortDirection = parseInt(req.query.sortDirection) || -1;
 
   const total = await Recharge.countDocuments({ ...keyword });
   const recharges = await Recharge.find({ ...keyword })
@@ -94,7 +94,7 @@ const getHistories = asyncHandler(async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 50;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort || "created_at";
-  const sortDirection = parseInt(req.query.sortDirection) || 1;
+  const sortDirection = parseInt(req.query.sortDirection) || -1;
 
   const total = await History.countDocuments({ ...keyword });
   const histories = await History.find({ ...keyword })
@@ -109,12 +109,12 @@ const getHistories = asyncHandler(async (req, res) => {
 const getHistoryByType = asyncHandler(async (req, res) => {
   const { type } = req.query;
   if (!type) throw new Error("Invalid type");
-  const histories = await History.find({ user: req.user._id, type });
+  const histories = await History.find({ user: req.user._id, type }).sort("-created_at");
   res.json(histories);
 });
 
 const invitedUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({ invited: req.user._id }).select("_id email username created_at");
+  const users = await User.find({ invited: req.user._id }).select("_id email username created_at").sort("-updated_at");
   res.status(200).json(users);
 });
 

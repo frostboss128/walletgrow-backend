@@ -93,7 +93,7 @@ const getUsers = asyncHandler(async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 50;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort || "created_at";
-  const sortDirection = parseInt(req.query.sortDirection) || 1;
+  const sortDirection = parseInt(req.query.sortDirection) || -1;
 
   const total = await User.countDocuments({ roles: "user", ...keyword });
   const users = await User.find({ roles: "user", ...keyword })

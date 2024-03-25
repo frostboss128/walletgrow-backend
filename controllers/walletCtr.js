@@ -47,7 +47,7 @@ const withdrawWallet = asyncHandler(async (req, res) => {
 });
 
 const getWithdraws = asyncHandler(async (req, res) => {
-  const withdraws = await Withdraw.find({ user: req.user._id });
+  const withdraws = await Withdraw.find({ user: req.user._id }).sort("-updated_at");
   res.status(200).json(withdraws);
 });
 
@@ -56,7 +56,7 @@ const getAllWithdraws = asyncHandler(async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 50;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort || "created_at";
-  const sortDirection = parseInt(req.query.sortDirection) || 1;
+  const sortDirection = parseInt(req.query.sortDirection) || -1;
 
   const total = await Withdraw.countDocuments({ ...keyword });
   const withdraws = await Withdraw.find({ ...keyword })

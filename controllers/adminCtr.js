@@ -47,7 +47,7 @@ const deleteInvestmentTypeById = asyncHandler(async (req, res) => {
 });
 
 const getAllInvestmentTypes = asyncHandler(async (req, res) => {
-  const types = await InvestmentType.find();
+  const types = await InvestmentType.find().sort("-updated_at");
   let temp = [];
   for (let i = 0; i < types.length; i++) {
     let userCnt = await Investment.countDocuments({ type: types[i]._id });
@@ -93,7 +93,7 @@ const getInvestmentByUserTypeId = asyncHandler(async (req, res) => {
 });
 
 const investmentRecord = asyncHandler(async (req, res) => {
-  const invests = await Investment.find({ user: req.user._id }).populate("type").populate("user");
+  const invests = await Investment.find({ user: req.user._id }).populate("type").populate("user").sort("-updated_at");
   res.status(200).json(invests);
 });
 
@@ -101,7 +101,9 @@ const getInvestmentHistoryByType = asyncHandler(async (req, res) => {
   const records = await InvestmentHistoryModel.find({
     user: req.user._id,
     type: req.params.investTypeId,
-  }).populate("type");
+  })
+    .populate("type")
+    .sort("-updated_at");
   res.status(200).json(records);
 });
 
