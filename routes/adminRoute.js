@@ -18,12 +18,12 @@ router.route("/user/:Id").get(protect, getInvestmentByUserTypeId);
 router.route("/user").get(protect, getInvestmentByUser);
 router.route("/record").get(protect, investmentRecord);
 
-router.route("/").post(protect, createNewType).get(protect, getAllInvestmentTypes);
+router.route("/").post(protect, isAdmin, createNewType).get(protect, getAllInvestmentTypes);
 
 router
   .route("/:typeId")
-  .post(protect, isAdmin, startNewInvestment)
-  .get(protect, isAdmin, getInvestmentTypeById)
+  .post(protect, startNewInvestment)
+  .get(protect, getInvestmentTypeById)
   .put(protect, isAdmin, updateInvestmentTypeById)
   .delete(protect, isAdmin, deleteInvestmentTypeById);
 
