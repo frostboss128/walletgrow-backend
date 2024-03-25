@@ -2,6 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import Wallet from "../models/walletModel.js";
+import { generateEmailToken, verifyEmailToken } from "../utils/EmailVerify.js";
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -40,6 +41,22 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
+});
+
+const confirmEmail = asyncHandler(async (req, res, next) => {
+  const token = generateEmailToken(req.user._id);
+  // Send email
+  res.status(200).json("Please check your inbox");
+});
+
+const verifyUser = asyncHandler(async (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token) throw new Error("Not authorized, no token");
+  const userId = verifyEmailToken(token);
+  const user = await User.findByIdAndUpdate(userId, { $set: { verified: true } });
+  if (!user) throw new Error("Email verification failed.");
+  res.status(201).json("success");
 });
 
 const logoutUser = (req, res) => {
@@ -108,7 +125,6 @@ const updateUserById = asyncHandler(async (req, res) => {
   req.body.password = user.password;
   req.body.created_at = user.created_at;
   req.body.updated_at = new Date();
-  console.log({ ...req.body });
   const updatedUser = await User.findByIdAndUpdate(req.params.userId, { ...req.body }, { runValidators: true });
   res.status(201).json(updatedUser);
 });
@@ -133,4 +149,6 @@ export {
   getUserById,
   updateUserById,
   deleteUserById,
+  confirmEmail,
+  verifyUser,
 };

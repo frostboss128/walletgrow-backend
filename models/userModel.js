@@ -20,10 +20,6 @@ const UserSchema = new Schema(
       required: true,
     },
     pay_password: String,
-    verified: {
-      type: Boolean,
-      default: false,
-    },
     level: {
       type: Number,
       default: 0,
@@ -40,6 +36,10 @@ const UserSchema = new Schema(
       type: String,
       enum: ["user", "admin", "superAdmin"],
       default: "user",
+    },
+    verified: {
+      type: Boolean,
+      default: false,
     },
   },
   {

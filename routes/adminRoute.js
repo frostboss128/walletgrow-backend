@@ -9,12 +9,14 @@ import {
   getInvestmentByUser,
   getInvestmentByUserTypeId,
   investmentRecord,
+  getInvestmentHistoryByType,
 } from "../controllers/adminCtr.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
 router.route("/user/:Id").get(protect, getInvestmentByUserTypeId);
+router.route("/invhis/:investTypeId").get(protect, getInvestmentHistoryByType);
 router.route("/user").get(protect, getInvestmentByUser);
 router.route("/record").get(protect, investmentRecord);
 

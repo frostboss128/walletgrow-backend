@@ -3,6 +3,7 @@ import InvestmentType from "../models/InvestmentTypeModel.js";
 import Investment from "../models/investmentModel.js";
 import Wallet from "../models/walletModel.js";
 import History from "../models/HistoryModel.js";
+import InvestmentHistoryModel from "../models/investmentHistoryModel.js";
 import moment from "moment";
 
 const createNewType = asyncHandler(async (req, res) => {
@@ -96,6 +97,14 @@ const investmentRecord = asyncHandler(async (req, res) => {
   res.status(200).json(invests);
 });
 
+const getInvestmentHistoryByType = asyncHandler(async (req, res) => {
+  const records = await InvestmentHistoryModel.find({
+    user: req.user._id,
+    type: req.params.investTypeId,
+  }).populate("type");
+  res.status(200).json(records);
+});
+
 export {
   createNewType,
   getInvestmentTypeById,
@@ -106,4 +115,5 @@ export {
   getInvestmentByUser,
   getInvestmentByUserTypeId,
   investmentRecord,
+  getInvestmentHistoryByType,
 };

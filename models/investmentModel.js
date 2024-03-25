@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import Wallet from "./walletModel.js";
+import InvestmentHistory from "./investmentHistoryModel.js";
 import moment from "moment";
 
 const InvestmentSchema = new Schema(
@@ -55,11 +56,11 @@ InvestmentSchema.methods.updateTotal = async function () {
 
   if (moment.utc().isBefore(this.end)) {
     const increaseAmount = (parseFloat(this.amount) * parseFloat(this.type.daily)) / 100;
+    await InvestmentHistory.create({ user: this.user, amount: parseFloat(increaseAmount), type: this.type });
     this.total = parseFloat(this.total_coin) + parseFloat(increaseAmount.toFixed(3));
   } else {
     this.completed = true;
-    const wallet = await Wallet.findOneAndUpdate({ user: this.user }, { $inc: { binance: parseFloat(this.total) } });
-    console.log(wallet.coin);
+    await Wallet.findOneAndUpdate({ user: this.user }, { $inc: { binance: parseFloat(this.total) } });
   }
 
   this.save();
