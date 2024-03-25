@@ -67,13 +67,13 @@ const updateRechargeStatus = asyncHandler(async (req, res) => {
   const amount = parseFloat(req.body.amount);
   const recharge = await Recharge.findById(req.params.rechargeId);
   if (!recharge) throw new Error(`Not found`);
-
   if (recharge.status !== "Approved" && status === "Approved") {
-    await User.findByIdAndUpdate(userId, { $inc: { binance: amount } });
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(userId);
+    user.binance = parseFloat(user.binance) + amount;
+    await user.save();
     if (!isEmpty(user.invited)) {
       await User.findByIdAndUpdate(user.invited, { $inc: { binance: amount * 0.05 } });
-      await History.create({ user: user.invited, type: "commission", amount: amount * 0.05 });
+      const his = await History.create({ user: user.invited, type: "commission", amount: amount * 0.05 });
     }
   }
   recharge.status = status;
