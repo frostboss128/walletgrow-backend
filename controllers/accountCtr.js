@@ -3,7 +3,6 @@ import User from "../models/userModel.js";
 import Wallet from "../models/walletModel.js";
 import Recharge from "../models/rechargeModel.js";
 import History from "../models/HistoryModel.js";
-import Admin from "../models/adminModel.js";
 import isEmpty from "../utils/isEmpty.js";
 
 const rechargeToAccount = asyncHandler(async (req, res) => {
@@ -128,5 +127,5 @@ export {
   deleteRechargeById,
   getHistories,
   getHistoryByType,
-  invitedUsers,
+  invitedUsers
 };

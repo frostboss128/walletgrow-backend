@@ -5,24 +5,24 @@ const InvestmentHistorySchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: true
     },
     type: {
       type: Schema.Types.ObjectId,
-      ref: "InvestmentType",
+      ref: "InvestmentType"
     },
     amount: {
       type: Schema.Types.Decimal128,
-      required: true,
-    },
+      required: true
+    }
   },
   {
     timestamps: {
       createdAt: "created_at",
-      updatedAt: "updated_at",
+      updatedAt: "updated_at"
     },
     toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
 

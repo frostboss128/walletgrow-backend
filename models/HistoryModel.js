@@ -5,25 +5,25 @@ const HistorySchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: true
     },
     type: {
       type: String,
       enum: ["in", "out", "invest", "commission"],
-      required: true,
+      required: true
     },
     amount: {
       type: Schema.Types.Decimal128,
-      required: true,
-    },
+      required: true
+    }
   },
   {
     timestamps: {
       createdAt: "created_at",
-      updatedAt: "updated_at",
+      updatedAt: "updated_at"
     },
     toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
 
