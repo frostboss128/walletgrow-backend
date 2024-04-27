@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkwalletgrow_frontend=self.webpackChunkwalletgrow_frontend||[]).push([[44],{2044:(e,t,l)=>{l.r(t),l.d(t,{default:()=>a});l(5043);var s=l(579);const a=()=>(0,s.jsx)("div",{className:"h-[calc(100vh_-_7rem)] w-full grid place-items-center pt-28",children:(0,s.jsx)("h1",{className:"text-2xl font-bold text-sky-600 text-center",children:"404 | Page Not Found "})})}}]);
-//# sourceMappingURL=44.64085fc7.chunk.js.map
